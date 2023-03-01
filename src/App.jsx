@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import Searchbar from 'components/Searchbar/Searchbar';
 import ImageGallery from 'components/ImageGallery';
 import Modal from 'components/Modal';
 import Button from 'components/Button';
 import ImageLoader from 'components/Loader/Loader';
 import imagesApi from './components/services/imagesApi';
+import 'react-toastify/dist/ReactToastify.css';
 
-class App extends Component {
-  state = {
-    searchQuery: '',
-    images: [],
-    page: 1,
-    largeImg: '',
-    error: null,
-    loading: false,
-    found: true,
-  };
+export default function App() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [images, setImages] = useState([]);
+  const [page, setPage] = useState(1);
+  const [largeImg, setLargeImg] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [found, setFound] = useState(true);
+  
 
   componentDidUpdate(prevState, prevProps) {
     if (this.state.page > 2) {
@@ -99,4 +99,3 @@ class App extends Component {
   }
 }
 
-export default App;
