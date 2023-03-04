@@ -1,17 +1,13 @@
 import PropTypes from 'prop-types';
-import './Button.styled.js';
-import { ButtonContainer, Button } from './Button.styled.js';
+import { StyledButton } from './Button.styled';
 
-export default function ButtonLoadMore({ onClick }) {
-  return (
-    <ButtonContainer className="Button-container">
-      <Button type="button" onClick={onClick}>
-        Load more...
-      </Button>
-    </ButtonContainer>
+export const Button = ({ children, onClick }) => (
+    <StyledButton type="button" onClick={onClick}>
+      {children}
+    </StyledButton>
   );
-}
-
-Button.propTypes = {
-  onClick: PropTypes.func.isRequired,
-};
+  
+  Button.propTypes = {
+    children: PropTypes.node,
+    onClick: PropTypes.func,
+  };

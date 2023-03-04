@@ -1,18 +1,10 @@
-import './Loader.styled.js';
-import { SpinnerEl, SpinnerContainer } from './Loader.styled.js';
+import { TailSpin } from 'react-loader-spinner';
+import { StyledLoader } from './Loader.styled';
 
-// взяли иконку из реакт-айкон и просто ей прикрутили анимацию и дали клас
-import { ImSpinner9 } from 'react-icons/im';
-
-export default function Loader() {
+export const Loader = () => {
   return (
-    <div role="alert">
-      <SpinnerContainer>
-        <SpinnerEl>
-          <ImSpinner9 size="32" />
-        </SpinnerEl>
-        Loading...
-      </SpinnerContainer>
-    </div>
+    <StyledLoader>
+      <TailSpin />
+    </StyledLoader>
   );
-}
+};

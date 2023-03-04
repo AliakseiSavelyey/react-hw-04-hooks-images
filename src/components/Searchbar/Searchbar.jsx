@@ -1,63 +1,59 @@
-import { Component } from 'react';
-// import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
-import './Searchbar.styled.js';
-import {
-  Searchbar,
-  SearchForm,
-  SearchFormButton,
-  SearchFormButtonLabel,
-  SearchFormInput,
-} from './Searchbar.styled';
-export default class SearchBar extends Component {
-  state = {
-    searchImage: '',
-  };
-  // обновляє стейт при кожному нажатии в инпуті
-  handleNameChange = event => {
-    // console.log(event.currentTarget.value);
-    this.setState({ searchImage: event.currentTarget.value.toLowerCase() });
+import { SearchForm, SearchHeader, SearchFormInput, SearchFormButton } from './Searchbar.styled';
+import {ReactComponent as AddSearch} from '../Icons/search 2 (1).svg'
+import React, { useState } from 'react';
+
+
+export function SearchBar ({ onSubmit }) {
+
+  const [query, setQuery] = useState('');
+
+  // Наблюдает за инпутом и пишет значние в стейт
+  const handleChange = e => {
+    setQuery( e.currentTarget.value );
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
-    // при сабміті нашої форми визиваємо метод із АРР (хендлформсабмит), який сюди передався як проп
-    // імя пропа може бути яке завгодно, я назвала інсабміт
-    // проверяем, если в форму ничего не ввели, или там просто пробелі (метод трим)
-    // то ми просто виходимо з цього метода і не самбітимо форму
-    if (this.state.searchImage.trim() === '') {
-      // console.log('пусто');
+  // Наблюдает за отправкой и отдает значение во внешний компонент
+  const handleSubmit = e => {
+      e.preventDefault();
+      // Запрещает отправку пустого инпута
+      if (query === '') {
+       
+      }
+      // Отдать данные внешнему компоненту
+      onSubmit(query);
+    
+      reset();
+    };
+  
+    const reset = () => {
+      setQuery( '' );
+    };
+  
+  return (
 
-      toast.error('Please enter your query');
-      return;
-    }
-    this.props.inSubmit(this.state.searchImage);
-    // очищаем стейт зразу після сабміта форми
-    // this.setState({ searchImage: '' });
-  };
-
-  render() {
-    return (
-      <Searchbar>
-        <SearchForm onSubmit={this.handleSubmit}>
+      <SearchHeader>
+        <SearchForm onSubmit={handleSubmit}>
           <SearchFormButton type="submit">
-            <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+            < AddSearch />
           </SearchFormButton>
 
           <SearchFormInput
             type="text"
+            name="query"
+            value={query}
+            onChange={handleChange}
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            value={this.state.searchImage}
-            onChange={this.handleNameChange}
           />
         </SearchForm>
-      </Searchbar>
+        
+      </SearchHeader>
     );
   }
-}
+
+
 SearchBar.propTypes = {
-  searchImage: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
 };

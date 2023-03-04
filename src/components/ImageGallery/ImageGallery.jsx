@@ -1,21 +1,32 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import ImageGalleryItem from '../ImageGalleryItem';
-// import './ImageGallery.styled.js';
-import { ImageGallery } from './ImageGallery.styled.js';
+import { Gallery } from './ImageGallery.styled'
+import  {ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem'
 
-export default function PixabayImageGallery({ images }) {
-  console.log(images);
+
+export const ImageGallery = ({ images, onClick }) => {
   return (
-    <div>
-      <ImageGallery>
-        {images.map(image => (
-          <ImageGalleryItem key={image.id} image={image} />
-        ))}
-      </ImageGallery>
-    </div>
+    <Gallery>
+      {images.map(({ id, webformatURL, largeImageURL, tags }) => (
+        <ImageGalleryItem
+          key={id}
+          webformatURL={webformatURL}
+          largeImageURL={largeImageURL}
+          tags={tags}
+          onClick={onClick}
+        />
+      ))}
+    </Gallery>
   );
-}
-PixabayImageGallery.propTypes = {
-  images: PropTypes.array.isRequired,
+};
+
+ImageGallery.propTypes = {
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    })
+  ),
+  onClick: PropTypes.func.isRequired,
 };
