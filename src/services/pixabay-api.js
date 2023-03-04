@@ -1,7 +1,7 @@
-const API_KEY = '25154920-bc2b97b916e9c15e1ff6fb5dd';
+const API_KEY = '33689458-96d026a39bbfa66b5f5b55deb';
 const BASE_URL = 'pixabay.com/api';
 
-const fetchImagesWithQuery = (image, page) => {
+function fetchPixabayImage(image, page) {
   return fetch(
     `https://${BASE_URL}/?q=${image}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`,
   ).then(response => {
@@ -14,8 +14,8 @@ const fetchImagesWithQuery = (image, page) => {
       ),
     );
   });
+}
+const pixabayAPI = {
+  fetchPixabayImage,
 };
-const imagesApi = {
-  fetchImagesWithQuery,
-};
-export default imagesApi;
+export default pixabayAPI;

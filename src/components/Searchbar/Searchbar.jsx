@@ -1,48 +1,63 @@
-import React, { Component } from 'react';
-import './Searchbar.scss';
+import { Component } from 'react';
+// import { useState } from 'react';
 import PropTypes from 'prop-types';
-
-class Searchbar extends Component {
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-  };
-
+import { toast } from 'react-toastify';
+import './Searchbar.styled.js';
+import {
+  Searchbar,
+  SearchForm,
+  SearchFormButton,
+  SearchFormButtonLabel,
+  SearchFormInput,
+} from './Searchbar.styled';
+export default class SearchBar extends Component {
   state = {
-    inputValue: '',
+    searchImage: '',
+  };
+  // обновляє стейт при кожному нажатии в инпуті
+  handleNameChange = event => {
+    // console.log(event.currentTarget.value);
+    this.setState({ searchImage: event.currentTarget.value.toLowerCase() });
   };
 
-  handleChange = e => {
-    this.setState({ inputValue: e.target.value });
-  };
+  handleSubmit = event => {
+    event.preventDefault();
+    // при сабміті нашої форми визиваємо метод із АРР (хендлформсабмит), який сюди передався як проп
+    // імя пропа може бути яке завгодно, я назвала інсабміт
+    // проверяем, если в форму ничего не ввели, или там просто пробелі (метод трим)
+    // то ми просто виходимо з цього метода і не самбітимо форму
+    if (this.state.searchImage.trim() === '') {
+      // console.log('пусто');
 
-  handleSubmit = e => {
-    e.preventDefault();
-
-    this.props.onSubmit(this.state.inputValue);
-    this.setState({ inputValue: '' });
+      toast.error('Please enter your query');
+      return;
+    }
+    this.props.inSubmit(this.state.searchImage);
+    // очищаем стейт зразу після сабміта форми
+    // this.setState({ searchImage: '' });
   };
 
   render() {
     return (
-      <header className="Searchbar">
-        <form onSubmit={this.handleSubmit} className="SearchForm">
-          <button type="submit" className="SearchFormButton">
-            <span className="SearchFormButtonLabel">Search</span>
-          </button>
+      <Searchbar>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <SearchFormButton type="submit">
+            <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+          </SearchFormButton>
 
-          <input
-            className="SearchFormInput"
+          <SearchFormInput
             type="text"
-            autocomplete="off"
-            autofocus
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
-            value={this.state.inputValue}
-            onChange={this.handleChange}
+            value={this.state.searchImage}
+            onChange={this.handleNameChange}
           />
-        </form>
-      </header>
+        </SearchForm>
+      </Searchbar>
     );
   }
 }
-
-export default Searchbar;
+SearchBar.propTypes = {
+  searchImage: PropTypes.string,
+};

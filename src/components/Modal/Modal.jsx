@@ -1,38 +1,53 @@
 import React, { Component } from 'react';
-import './Modal.scss';
 import PropTypes from 'prop-types';
 
-class Modal extends Component {
-  static propTypes = {
-    largeImg: PropTypes.string.isRequired,
-    closeModal: PropTypes.func.isRequired,
-  };
+// імпортуем метод для створення портала для модалки
+import { createPortal } from 'react-dom';
+// import './Modal.styled.js';
+import { Overlay, ImageModal } from './Modal.styled.js';
+// вибираємо по селектору айди
+const modalRoot = document.querySelector('#modal-root');
 
+export default class Modal extends Component {
   componentDidMount() {
-    window.addEventListener('keydown', this.onCloseModal);
-    window.addEventListener('click', this.onCloseModal);
+    console.log('Modal componentDidMount');
+    window.addEventListener('keydown', this.handleKeyDown);
   }
-
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.onCloseModal);
-    window.removeEventListener('click', this.onCloseModal);
+    console.log('Modal componentWillUnmount');
+    window.removeEventListener('keydown', this.handleKeyDown);
+    // console.log('почистили едвенлістенер');
   }
-
-  onCloseModal = e => {
-    if (e.code === 'Escape' || e.target.nodeName !== 'IMG') {
-      this.props.closeModal();
+  handleKeyDown = e => {
+    // console.log(e.code)
+    if (e.code === 'Escape') {
+      // console.log('нажали на ескейп, потрібно закрити модалку');
+      this.props.onClose();
     }
   };
-
+  handleBackdropClick = e => {
+    // console.log('клікнули в бекдроп');
+    // якщо клікнути в біле поле (текст параграф, то подія спливе до бекдропа і там ми її відловимо
+    // нам треба відрізняти - де ми клікнули саме в бекдроп, а де у вкладені елементи під бекдропом
+    // для цього є карент таргет -(на чому зловили подію) і таргет- (на що ми клацнули))
+    // console.log( 'куди тицьнули' , e.target);
+    // console.log('де зловили подію', e.currentTarget);
+    if (e.target === e.currentTarget) {
+      this.props.onClose();
+    }
+  };
   render() {
-    return (
-      <div className="Overlay">
-        <div className="Modal">
-          <img src={this.props.largeImg} alt="" className="Img" />
-        </div>
-      </div>
+    //   визиваємо метод криейтпортал и передаемо йому разметку модалки, яку треба зарендерить та другим аргументом -
+    // квериселектор - куди треба цю модалку зарендерить
+    return createPortal(
+      <Overlay onClick={this.handleBackdropClick}>
+        <ImageModal>{this.props.children}</ImageModal>
+      </Overlay>,
+      modalRoot
     );
   }
 }
-
-export default Modal;
+Modal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  children: PropTypes.object,
+};

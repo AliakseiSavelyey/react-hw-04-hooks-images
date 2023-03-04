@@ -1,24 +1,21 @@
 import React from 'react';
-import './ImageGallery.scss';
-import ImageGalleryItem from 'components/ImageGallery/ImageGalleryItem/ImageGalleryItem';
 import PropTypes from 'prop-types';
+import ImageGalleryItem from '../ImageGalleryItem';
+// import './ImageGallery.styled.js';
+import { ImageGallery } from './ImageGallery.styled.js';
 
-const ImageGallery = ({ images, handleBigImg }) => {
-  const items = images.map(e => (
-    <ImageGalleryItem
-      key={e.id}
-      webformatURL={e.webformatURL}
-      largeImageURL={e.largeImageURL}
-      tags={e.tags}
-      handleBigImg={handleBigImg}
-    />
-  ));
-  return <ul className="ImageGallery">{items}</ul>;
-};
-
-ImageGallery.propTypes = {
+export default function PixabayImageGallery({ images }) {
+  console.log(images);
+  return (
+    <div>
+      <ImageGallery>
+        {images.map(image => (
+          <ImageGalleryItem key={image.id} image={image} />
+        ))}
+      </ImageGallery>
+    </div>
+  );
+}
+PixabayImageGallery.propTypes = {
   images: PropTypes.array.isRequired,
-  handleBigImg: PropTypes.func.isRequired,
 };
-
-export default ImageGallery;
